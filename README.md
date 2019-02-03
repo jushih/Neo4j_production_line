@@ -23,7 +23,7 @@ My final data is parsed into two CSVs:
 
 **relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response):
 
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="450">
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="550">
 
 ## Neo4j
 
@@ -57,7 +57,7 @@ return n
 limit 10;
 ```
 
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/check_nodes.png" width="700">
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/neo4j_nodes.png" width="800">
 
 
 I add a constraint to ensure station nodes are unique. This also indexes the station and allows for faster querying.
