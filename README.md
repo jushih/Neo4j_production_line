@@ -19,11 +19,11 @@ My final data is parsed into two CSVs:
 
 **nodes.csv** - Each row is a station in the production line. There are 968 unique stations:
 
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/nodes.png" width="200">
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/nodes.png" width="250">
 
 **relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response):
 
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="350">
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="450">
 
 ## Neo4j
 
@@ -49,6 +49,16 @@ USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:///nodes.csv" AS row
 CREATE (:Station {stationId: row.stationId, line:row.line, station: row.station, feature: row.feature});
 ```
+
+Once the nodes are created, run a Cypher query to look at the nodes in the database. Cypher is the query language of Neo4j. This simple query pulls up 10 stations.
+```
+match (n)
+return n
+limit 10;
+```
+
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/check_nodes.png" width="700">
+
 
 I add a constraint to ensure station nodes are unique. This also indexes the station and allows for faster querying.
 ```
