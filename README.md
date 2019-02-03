@@ -19,7 +19,11 @@ My final data is parsed into two CSVs:
 
 **nodes.csv** - Each row is a station in the production line. There are 968 unique stations.
 
+![image1](/images/nodes.png)
+
 **relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response).
+
+![image2](/images/relationships.png)
 
 ## Neo4j
 
