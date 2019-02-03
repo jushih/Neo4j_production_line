@@ -17,18 +17,43 @@ A graph database is made up of nodes and relationships. I remodel the Bosch data
 For ETL of the data, I will take advantage of the LOAD CSV feature in Neo4j. I restructure the data into CSVs where each row represents the node or relationship that will be created.
 My final data is parsed into two CSVs:
 
-**nodes.csv** - Each row is a station in the production line. There are 968 unique stations.
+**nodes.csv** - Each row is a station in the production line. There are 968 unique stations:
 
-![image1](/images/nodes.png)
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/nodes.png" width="200">
 
-**relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response).
+**relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response):
 
-![image2](/images/relationships.png)
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="350">
 
 ## Neo4j
 
-Next I load the data from the CSV files into the graph database. I download the community version Neo4j and create a new database. 
+Next is loading the data from the CSV files into the graph database. I download the community version Neo4j and create a new database. 
 
+To allow importing from CSV, I change the settings in the neo4j.conf and put the CSVs in the import folder where they are read from.
+```
+dbms.security.allow_csv_import_from_file_urls=true
+
+dbms.directories.import=import #path to csv directory
+```
+
+Before the first load, I check the header mapping to ensure the fields are correctly formatted.
+```
+LOAD CSV WITH HEADERS FROM "file:///nodes.csv" AS line WITH line
+RETURN line
+LIMIT 5; 
+```
+
+I then create the station nodes.
+```
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:///nodes.csv" AS row
+CREATE (:Station {stationId: row.stationId, line:row.line, station: row.station, feature: row.feature});
+```
+
+I add a constraint to ensure station nodes are unique. This also indexes the station and allows for faster querying.
+```
+CREATE CONSTRAINT ON (s:Station) ASSERT s.stationId IS UNIQUE;
+```
 
 ## References
 https://www.kaggle.com/c/bosch-production-line-performance
