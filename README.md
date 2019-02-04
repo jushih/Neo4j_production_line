@@ -1,6 +1,11 @@
+## Modeling production line data in Neo4j 
+
+In this project, I will deploy a Neo4j graph database and populate it with data from the Bosch manufacturing line. Pictured below is a sample from my final database. It shows the paths of two parts (23 and 76) as they move through stations in the production line. Manufacturing and supply chain data is suited to graph databases because it is highly connected and has the advantage of performance and flexibility over a traditional RDMS. 
+
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/2parts.png" width="800">
+
 ## Dataset
-I will be modeling production line data in a Neo4j database. Production line data is suited to a graph database because it is highly connected and has the advantage of performance and flexibility over a traditional RDMS. 
-The dataset was obtained from the Kaggle website and provided by Bosch, a company that manufactures high end appliances. I use a subsample of the data put together by Hitesh Basantani of the Portland Data Science Group and deploy it to a Neo4j graph database. 
+The dataset was obtained from the Kaggle website and provided by Bosch, a company that manufactures high end appliances. I use a subsample of the data put together by Hitesh Basantani of the Portland Data Science Group.
 
 The dataset contains:
 
@@ -14,6 +19,8 @@ From here on, when I refer to a "station", I am referring to the station at its 
 
 A graph database is made up of nodes and relationships. I remodel the Bosch dataset into a graph database schema where each node will represent a station in the production line, and a part moving through the station will be represented by a relationship. I will record the values of each part as it moves from station to station by saving it as a relationship property. 
 
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/data_schema.png" width="700">
+
 For ETL of the data, I will take advantage of the LOAD CSV feature in Neo4j. I restructure the data into CSVs where each row represents the node or relationship that will be created.
 My final data is parsed into two CSVs:
 
@@ -23,9 +30,9 @@ My final data is parsed into two CSVs:
 
 **relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response):
 
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="700">
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="600">
 
-## Neo4j
+## Loading to Neo4j
 
 Next is loading the data from the CSV files into the graph database. I download the community version Neo4j and create a new database. 
 
