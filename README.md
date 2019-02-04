@@ -37,7 +37,7 @@ My final dataset is parsed into two CSVs:
 
 Next is loading the data from the CSV files into the graph database. I download the community version Neo4j and create a new database. 
 
-To allow importing from CSV, I change the settings in the neo4j.conf and put the CSVs in the import folder where they are read from.
+To allow importing from CSV, I change the settings in the neo4j.conf file and put the CSVs in the import folder where they are read from.
 ```
 dbms.security.allow_csv_import_from_file_urls=true
 
