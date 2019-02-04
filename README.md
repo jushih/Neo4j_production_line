@@ -5,10 +5,10 @@ The dataset was obtained from the Kaggle website and provided by Bosch, a compan
 The dataset contains:
 
 * **id** - unique identifier for parts
-* **L columns** - represents multiple manufacturing lines (M), stations (S), and additional features (F). 
+* **L columns** - represents multiple manufacturing lines (L), stations (S), and additional features (F). In each column is the value of the part measured when it leaves the station.
 * **response** - 1 is a faulty part, 0 is a non-faulty part
 
-From here on, when I refer to a "station", I am referring to the station at its most granular feature level. 
+From here on, when I refer to a "station", I am referring to the station at its most granular feature (F) level. 
 
 ## Data Modeling and Preprocessing
 
@@ -50,12 +50,12 @@ LOAD CSV WITH HEADERS FROM "file:///nodes.csv" AS row
 CREATE (:Station {stationId: row.stationId, line:row.line, station: row.station, feature: row.feature});
 ```
 
-I add a constraint to ensure station nodes are unique. This also indexes the station and allows for faster querying.
+I add a constraint to ensure station nodes are unique. This also indexes the station and allows for faster querying, which will be important for scaling.
 ```
 CREATE CONSTRAINT ON (s:Station) ASSERT s.stationId IS UNIQUE;
 ```
 
-Once the nodes are created, run a Cypher query to look at the nodes in the database. Cypher is the query language of Neo4j. This simple query pulls up 10 stations.
+Once the nodes are created, I run a Cypher query to look at the nodes in the database. Cypher is the query language of Neo4j. This simple query pulls up 10 stations.
 ```
 MATCH(n)
 RETURN n
@@ -64,7 +64,7 @@ LIMIT 10;
 
 <img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/neo4j_nodes.png" width="800">
 
-Hovering over each node will show its node properties. For the highlighted station feature F1145, we can see that it belongs to Line 1 and Station 24 and its full ID is L1_S24_F1145.
+Hovering over each node will show its properties. For the highlighted station feature F1145, we can see that it belongs to Line 1 and Station 24. Its full ID is L1_S24_F1145.
 
 Now that the nodes are created, it's time to add relationships. I use Cypher to "match" the nodes to the station that each part is entering and exiting. Then I draw a relationship between those nodes and fill it with the properties of that part during its transition.
 
@@ -86,8 +86,13 @@ return n,r, m
 
 <img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/part71.png" width="800">
 
-Part 71 moves through 190 stations.
+Part 71 moves through 190 stations. I can zoom in on the image to look at a singular relationship. As the part moves from station F314 to F318, its value is -0.219. The part was not a defective part (response = 0). The part entered the manufacturing line at station F0, and finished at station F3950.
 
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/part71_zoom.png" width="800">
+
+Here is another sample of the data that shows multiple parts moving between stations. The highlighted relationship is a faulty part that was produced by the station.
+
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/faulty_part.png" width="800">
 
 
 ## References
