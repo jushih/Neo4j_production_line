@@ -23,7 +23,7 @@ My final data is parsed into two CSVs:
 
 **relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response):
 
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="450">
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="550">
 
 ## Neo4j
 
@@ -43,26 +43,37 @@ RETURN line
 LIMIT 5; 
 ```
 
-I then create the station nodes.
+I then create the station nodes. 
 ```
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:///nodes.csv" AS row
 CREATE (:Station {stationId: row.stationId, line:row.line, station: row.station, feature: row.feature});
 ```
 
-Once the nodes are created, run a Cypher query to look at the nodes in the database. Cypher is the query language of Neo4j. This simple query pulls up 10 stations.
-```
-match (n)
-return n
-limit 10;
-```
-
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/check_nodes.png" width="700">
-
-
 I add a constraint to ensure station nodes are unique. This also indexes the station and allows for faster querying.
 ```
 CREATE CONSTRAINT ON (s:Station) ASSERT s.stationId IS UNIQUE;
+```
+
+Once the nodes are created, run a Cypher query to look at the nodes in the database. Cypher is the query language of Neo4j. This simple query pulls up 10 stations.
+```
+MATCH(n)
+RETURN n
+LIMIT 10;
+```
+
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/neo4j_nodes.png" width="800">
+
+Hovering over each node will show its node properties. For the highlighted station feature F1145, we can see that it belongs to Line 1 and Station 24 and its full ID is L1_S24_F1145.
+
+Now that the nodes are created, it's time to add relationships. I will use Cypher to "match" the nodes to the station that each part is entering and exiting. Then I will draw a relationship between those nodes and fill it with the properties of that part during its transition.
+
+```
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:///relationships" AS row
+MATCH (en:Station {stationId: row.enter})
+MATCH (ex:Station {stationId: row.exit})
+MERGE (en)-[r:TO {lineStart:row.line_start,lineEnd:row.line_end,value:row.value,partID: row.part_id,response:row.response}]->(ex)
 ```
 
 ## References
