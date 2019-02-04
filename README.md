@@ -94,11 +94,11 @@ return n,r, m
 
 <img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/part71.png" width="800">
 
-Part 71 moves through 190 stations. I can zoom in on the image to look at a singular relationship. As the part moves from station F314 to F318, its value is -0.219. The part was not a defective part (response = 0). The part entered the manufacturing line at station F0, and finished at station F3950.
+Part 71 moves through 190 stations. I toggle the relationships to display the part's value. I can zoom in on the image to look at a singular relationship. As the part moves from station F314 to F318, its value is -0.219. The part was not a defective part (response = 0). The part entered the manufacturing line at station F0, and finished at station F3950.
 
 <img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/part71_zoom.png" width="800">
 
-Here is another sample of the data that shows multiple parts moving between stations. Due to the large number of parts, only a subset of the relationships connected to the nodes are represented. The highlighted relationship is a faulty part that was produced by the station.
+Here is another sample of the data that shows multiple parts moving between stations. The relationships were toggled to display the part's response. Due to the large number of parts, only a subset of the relationships connected to the nodes are shown. The highlighted relationship is a faulty part that was produced by the station. 
 
 <img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/faulty_part.png" width="800">
 
