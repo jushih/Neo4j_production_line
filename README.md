@@ -21,8 +21,9 @@ A graph database is made up of nodes and relationships. I remodel the Bosch data
 
 <img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/data_schema.png" width="700">
 
-For ETL of the data, I will take advantage of the LOAD CSV feature in Neo4j. I restructure the data into CSVs where each row represents the node or relationship that will be created.
-My final data is parsed into two CSVs:
+For ETL of the data, I will take advantage of the LOAD CSV feature in Neo4j. I restructure the Bosch data into CSVs where each row represents the node or relationship that will be created. I also find the starting stations and end stations of each part. The preprocessing steps can be found in the parse_transitions iPython notebook.
+
+My final dataset is parsed into two CSVs:
 
 **nodes.csv** - Each row is a station in the production line. There are 968 unique stations:
 
