@@ -1,6 +1,6 @@
 ## Dataset
 I will be modeling production line data in a Neo4j database. Production line data is suited to a graph database because it is highly connected and has the advantage of performance and flexibility over a traditional RDMS. 
-The dataset was obtained from the Kaggle website and provided by Bosh, a company that manufactures high end appliances. I use a subsample of the data put together by Hitesh of the Portland Data Science Group and deploy it to a Neo4j graph database. 
+The dataset was obtained from the Kaggle website and provided by Bosch, a company that manufactures high end appliances. I use a subsample of the data put together by Hitesh Basantani of the Portland Data Science Group and deploy it to a Neo4j graph database. 
 
 The dataset contains:
 
@@ -23,7 +23,7 @@ My final data is parsed into two CSVs:
 
 **relationships.csv** - Each row is the transition of a part moving from one station to another, along with its value as it exits the station, the station where the part began in the production line (line_start) and ended in the production line (line_end), and whether it was a faulty part or not (response):
 
-<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="550">
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/relationships.png" width="700">
 
 ## Neo4j
 
@@ -66,7 +66,7 @@ LIMIT 10;
 
 Hovering over each node will show its node properties. For the highlighted station feature F1145, we can see that it belongs to Line 1 and Station 24 and its full ID is L1_S24_F1145.
 
-Now that the nodes are created, it's time to add relationships. I will use Cypher to "match" the nodes to the station that each part is entering and exiting. Then I will draw a relationship between those nodes and fill it with the properties of that part during its transition.
+Now that the nodes are created, it's time to add relationships. I use Cypher to "match" the nodes to the station that each part is entering and exiting. Then I draw a relationship between those nodes and fill it with the properties of that part during its transition.
 
 ```
 USING PERIODIC COMMIT
@@ -75,6 +75,20 @@ MATCH (en:Station {stationId: row.enter})
 MATCH (ex:Station {stationId: row.exit})
 MERGE (en)-[r:TO {lineStart:row.line_start,lineEnd:row.line_end,value:row.value,partID: row.part_id,response:row.response}]->(ex)
 ```
+
+I can run a Cypher query to look at the path of one part through the manufacturing line. 
+
+```
+MATCH (n)-[r]-(m)
+WHERE r.partID = '71'
+return n,r, m
+```
+
+<img src="https://github.com/jushih/Neo4j_production_line/blob/master/images/part71.png" width="800">
+
+Part 71 moves through 190 stations.
+
+
 
 ## References
 https://www.kaggle.com/c/bosch-production-line-performance
